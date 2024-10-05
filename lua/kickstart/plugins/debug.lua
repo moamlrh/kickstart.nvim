@@ -16,6 +16,7 @@ return {
 
     -- Required dependency for nvim-dap-ui
     'nvim-neotest/nvim-nio',
+    'theHamsta/nvim-dap-virtual-text',
 
     -- Installs the debug adapters for you
     'williamboman/mason.nvim',
@@ -24,16 +25,18 @@ return {
     -- Add your own debuggers here
     'leoluz/nvim-dap-go',
   },
+
   keys = function(_, keys)
     local dap = require 'dap'
     local dapui = require 'dapui'
     return {
       -- Basic debugging keymaps, feel free to change to your liking!
-      { '<F5>', dap.continue, desc = 'Debug: Start/Continue' },
+      { '<leader>db', dap.continue, desc = 'Debug: Start/Continue' },
       { '<F1>', dap.step_into, desc = 'Debug: Step Into' },
       { '<F2>', dap.step_over, desc = 'Debug: Step Over' },
       { '<F3>', dap.step_out, desc = 'Debug: Step Out' },
       { '<leader>b', dap.toggle_breakpoint, desc = 'Debug: Toggle Breakpoint' },
+      { '<leader>dr', dap.repl.toggle, desc = 'Inspecting the state via the built-in REPL' },
       {
         '<leader>B',
         function()
@@ -46,10 +49,12 @@ return {
       unpack(keys),
     }
   end,
+
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
 
+    require('nvim-dap-virtual-text').setup()
     require('mason-nvim-dap').setup {
       -- Makes a best effort to setup the various debuggers with
       -- reasonable debug configurations
